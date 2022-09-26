@@ -1,0 +1,75 @@
+version: "3.9"
+services:
+  eureka-service-final:
+    image: eureka-service-final
+    ports:
+      - "8761:8761"
+    restart: always
+  config-service-final:
+    image: config-service-final
+    ports:
+      - "8888:8888"
+    restart: always
+  gateway-service-final:
+    image: gateway-service-final
+    ports:
+      - "8080:8080"
+    restart: always
+  movie-service-final:
+    image: movie-service-final
+    ports:
+      - "8082:8082"
+    restart: always
+  mysql:
+    image: mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=finalBack
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass
+      - MYSQL_ROOT_PASSWORD=pass
+  catalog-service-final:
+    image: catalog-service-final
+    ports:
+      - "8084:8084"
+    restart: always
+  mongodb:
+    image: mongo
+    container_name: "mongodb"
+    command: mongod --auth
+    environment:
+      - MONGO_INITDB_DATABASE=admin
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass
+    ports:
+      - "27017:27017"
+  serie-service-final:
+    image: serie-service-final
+    ports:
+      - "8086:8086"
+    restart: always
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=rootuser
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpass
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+  rabbitmq:
+    image: rabbitmq:3.7.2-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+volumes:
+  data: { }
+networks:
+  default:
+    name: tp_final_nadiamm

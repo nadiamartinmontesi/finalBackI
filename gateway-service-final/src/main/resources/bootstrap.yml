@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: gateway-service-final
+  cloud:
+    config:
+      fail-fast: true
+      discovery:
+        enabled: true
+        service-id: config-service-final
+  profiles:
+    active: dev
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-service-final:8761/eureka
