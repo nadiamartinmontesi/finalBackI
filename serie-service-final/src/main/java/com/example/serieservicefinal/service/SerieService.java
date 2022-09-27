@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface SerieService {
     List<Serie> getListByGenre(String genre);
-    Serie insertSerie(Serie movie);
+    Serie save(Serie serie);
 }

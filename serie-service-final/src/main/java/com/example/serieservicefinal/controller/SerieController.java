@@ -2,6 +2,7 @@ package com.example.serieservicefinal.controller;
 
 import com.example.serieservicefinal.entities.Serie;
 import com.example.serieservicefinal.service.SerieService;
+import com.example.serieservicefinal.service.imp.SerieServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,10 +14,10 @@ import java.util.List;
 @RequestMapping("/series")
 public class SerieController {
 
-    private SerieService serieService;
+    private SerieServiceImpl serieService;
 
     @Autowired
-    public SerieController(SerieService serieService) {
+    public SerieController(SerieServiceImpl serieService) {
         this.serieService = serieService;
     }
 
@@ -29,7 +30,7 @@ public class SerieController {
     }
 
     @PostMapping
-    public ResponseEntity<Serie> insertSerie(@RequestBody Serie serie) {
-        return ResponseEntity.ok().body(serieService.insertSerie(serie));
+    public ResponseEntity<Serie> save(@RequestBody Serie serie) {
+        return ResponseEntity.ok().body(serieService.save(serie));
     }
 }

@@ -32,14 +32,14 @@ public class SerieServiceImpl implements SerieService {
     }
 
     @Override
-    public Serie insertSerie(Serie serie) {
+    public Serie save(Serie serie) {
         LOG.info("Guardando serie");
-        return serieRepository.insertSerie(serie);
+        return serieRepository.save(serie);
     }
 
     @RabbitListener(queues = "${queue.serie.name}")
     public void saveSerie(Serie serie) {
         LOG.info("Guardando serie vía Rabbit");
-        serieRepository.insertSerie(serie);
+        serieRepository.save(serie);
     }
 }
