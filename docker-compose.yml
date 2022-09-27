@@ -32,8 +32,18 @@ services:
   catalog-service-final:
     image: catalog-service-final
     ports:
-      - "8084:8084"
+      - "8088:8088"
     restart: always
+  mongodbCatalog:
+    image: mongo
+    container_name: "mongodbCatalog"
+    command: mongod --auth
+    environment:
+      - MONGO_INITDB_DATABASE=admin
+      - MONGO_INITDB_ROOT_USERNAME=rootuser
+      - MONGO_INITDB_ROOT_PASSWORD=rootpass
+    ports:
+      - "27018:27018"
   mongodb:
     image: mongo
     container_name: "mongodb"

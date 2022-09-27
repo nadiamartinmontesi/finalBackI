@@ -1,7 +1,6 @@
 package com.example.movieservicefinal.controller;
 
 import com.example.movieservicefinal.entity.Movie;
-import com.example.movieservicefinal.service.MovieService;
 import com.example.movieservicefinal.service.impl.MovieServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,5 +36,11 @@ public class MovieController {
     @PostMapping
     public ResponseEntity<Movie> saveMovie(@RequestBody Movie movie) {
         return ResponseEntity.ok().body(movieService.save(movie));
+    }
+
+    @PostMapping("/saveMovie")
+    public ResponseEntity<String> saveMovieRabbit(@RequestBody Movie movie){
+        movieService.save(movie);
+        return ResponseEntity.ok("La película se envió a la cola.");
     }
 }

@@ -1,10 +1,8 @@
 package com.example.catalogservicefinal.controller;
 
-import com.example.catalogservicefinal.dto.CatalogDTO;
 import com.example.catalogservicefinal.dto.MovieDTO;
-import com.example.catalogservicefinal.dto.SerieDTO;
 import com.example.catalogservicefinal.entity.Catalog;
-import com.example.catalogservicefinal.service.CatalogService;
+import com.example.catalogservicefinal.service.impl.CatalogServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +15,11 @@ import java.util.Objects;
 @RequestMapping("/catalogs")
 public class CatalogController {
 
-    private final CatalogService catalogService;
+    private final CatalogServiceImpl catalogServiceImpl;
 
     @Autowired
-    public CatalogController(CatalogService catalogService) {
-        this.catalogService = catalogService;
+    public CatalogController(CatalogServiceImpl catalogServiceImpl) {
+        this.catalogServiceImpl = catalogServiceImpl;
     }
 
     //metodo del parcial...
@@ -34,8 +32,8 @@ public class CatalogController {
     //}
 
     @GetMapping("/{genre}")
-    public ResponseEntity<CatalogDTO> getCatalogByGenre(@PathVariable String genre) {
-        CatalogDTO catalogByGenre = catalogService.getCatalogByGenre(genre);
+    public ResponseEntity<Catalog> getCatalogByGenre(@PathVariable String genre) {
+        Catalog catalogByGenre = catalogServiceImpl.getCatalogByGenre(genre);
         return Objects.isNull(catalogByGenre)
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(catalogByGenre, HttpStatus.OK);
@@ -43,27 +41,15 @@ public class CatalogController {
 
     @PostMapping("/save/{genre}")
     public ResponseEntity<Catalog> saveCatalogByGenre(@PathVariable String genre){
-        Catalog savingCatalog = catalogService.saveCatalogByGenre(genre);
+        Catalog savingCatalog = catalogServiceImpl.saveCatalogByGenre(genre);
         return Objects.isNull(savingCatalog)
                 ? new ResponseEntity<>(HttpStatus.NOT_FOUND)
                 : new ResponseEntity<>(savingCatalog, HttpStatus.OK);
     }
 
-    @PostMapping("/saveMovie")
-    public ResponseEntity<String> saveMovie(@RequestBody MovieDTO movieDTO){
-        catalogService.saveMovie(movieDTO);
-        return ResponseEntity.ok("La pelicula se envió a la cola.");
-    }
-
-    @PostMapping("/saveSerie")
-    public ResponseEntity<String> saveSerie(@RequestBody SerieDTO serieDTO){
-        catalogService.saveSerie(serieDTO);
-        return ResponseEntity.ok("La serie se envió a la cola.");
-    }
-
     @GetMapping("/withErrors/{genre}")
     ResponseEntity<List<MovieDTO>> getGenre(@PathVariable String genre, @RequestParam("throwError") Boolean throwError) {
-        return catalogService.findMovieByGenre(genre, throwError);
+        return catalogServiceImpl.findMovieByGenre(genre, throwError);
     }
 
 }

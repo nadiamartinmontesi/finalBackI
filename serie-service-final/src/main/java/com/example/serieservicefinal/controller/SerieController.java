@@ -1,7 +1,6 @@
 package com.example.serieservicefinal.controller;
 
 import com.example.serieservicefinal.entities.Serie;
-import com.example.serieservicefinal.service.SerieService;
 import com.example.serieservicefinal.service.imp.SerieServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,5 +31,11 @@ public class SerieController {
     @PostMapping
     public ResponseEntity<Serie> save(@RequestBody Serie serie) {
         return ResponseEntity.ok().body(serieService.save(serie));
+    }
+
+    @PostMapping("/saveSerie")
+    public ResponseEntity<String> saveSerieRabbit(@RequestBody Serie serie){
+        serieService.save(serie);
+        return ResponseEntity.ok("La serie se envió a la cola.");
     }
 }

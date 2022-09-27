@@ -6,6 +6,7 @@ import com.example.movieservicefinal.service.MovieService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,20 +21,23 @@ public class MovieServiceImpl implements MovieService {
     public static Logger LOG = LoggerFactory.getLogger(MovieService.class);
     private final MovieRepository movieRepository;
 
+    private RabbitTemplate rabbitTemplate;
+
     @Autowired
-    public MovieServiceImpl(MovieRepository movieRepository) {
+    public MovieServiceImpl(MovieRepository movieRepository, RabbitTemplate rabbitTemplate) {
         this.movieRepository = movieRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
     public List<Movie> getListByGenre(String genre) {
-        LOG.info("Buscando peliculas segun genero");
+        LOG.info("Buscando películas según género");
         return movieRepository.findAllByGenre(genre);
     }
 
     @Override
     public Movie save(Movie movie) {
-        LOG.info("Guardando pelicula");
+        LOG.info("Guardando película");
         return movieRepository.save(movie);
     }
 
@@ -43,10 +47,8 @@ public class MovieServiceImpl implements MovieService {
         return movieRepository.findAllByGenre(genre);
     }
 
-    @RabbitListener(queues = "${queue.movie.name}")
-    public void saveMovie(Movie movie) {
-        LOG.info("Guardando pelicula vía Rabbit");
-        movieRepository.save(movie);
+    public void saveMovieRabbit(Movie movie){
+        rabbitTemplate.convertAndSend(movieQueue, movie);
     }
 
 }
